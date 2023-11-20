@@ -36,34 +36,34 @@ namespace wemusic.Migrations
                     b.ToTable("AlbumArtist");
                 });
 
-            modelBuilder.Entity("AlbumSong", b =>
+            modelBuilder.Entity("ArtistGenre", b =>
                 {
-                    b.Property<string>("AlbumsId")
+                    b.Property<string>("ArtistsId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SongsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("AlbumsId", "SongsId");
-
-                    b.HasIndex("SongsId");
-
-                    b.ToTable("AlbumSong");
-                });
-
-            modelBuilder.Entity("GenreSong", b =>
-                {
                     b.Property<string>("GenresId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.HasKey("ArtistsId", "GenresId");
+
+                    b.HasIndex("GenresId");
+
+                    b.ToTable("ArtistGenre");
+                });
+
+            modelBuilder.Entity("FavoriteSong", b =>
+                {
+                    b.Property<int>("FavoritesId")
+                        .HasColumnType("int");
+
                     b.Property<string>("SongsId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("GenresId", "SongsId");
+                    b.HasKey("FavoritesId", "SongsId");
 
                     b.HasIndex("SongsId");
 
-                    b.ToTable("GenreSong");
+                    b.ToTable("FavoriteSong");
                 });
 
             modelBuilder.Entity("PlaylistSong", b =>
@@ -90,16 +90,20 @@ namespace wemusic.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("name")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("releaseDate")
+                    b.Property<string>("ReleaseDate")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("totalSongs")
+                    b.Property<int>("TotalSongs")
                         .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -111,12 +115,12 @@ namespace wemusic.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("Followers")
                         .HasColumnType("int");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -127,12 +131,34 @@ namespace wemusic.Migrations
                     b.ToTable("Artists");
                 });
 
+            modelBuilder.Entity("wemusic.Controllers.Favorite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsFavorite")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserName");
+
+                    b.ToTable("Favorite");
+                });
+
             modelBuilder.Entity("wemusic.Controllers.Genre", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("genre")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -141,38 +167,15 @@ namespace wemusic.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("wemusic.Controllers.Image", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ArtistId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("src")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ArtistId");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("wemusic.Controllers.Playlist", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AlbumType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("TotalSong")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -182,7 +185,7 @@ namespace wemusic.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserName");
 
                     b.ToTable("Playlists");
                 });
@@ -203,23 +206,29 @@ namespace wemusic.Migrations
                     b.Property<int>("Stream")
                         .HasColumnType("int");
 
-                    b.Property<string>("albumType")
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("img")
+                    b.Property<string>("albumId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("albumId");
 
                     b.ToTable("Songs");
                 });
 
             modelBuilder.Entity("wemusic.Controllers.User", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -229,19 +238,11 @@ namespace wemusic.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("email")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("passwordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("userName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserName");
 
                     b.ToTable("Users");
                 });
@@ -261,26 +262,26 @@ namespace wemusic.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AlbumSong", b =>
+            modelBuilder.Entity("ArtistGenre", b =>
                 {
-                    b.HasOne("wemusic.Controllers.Album", null)
+                    b.HasOne("wemusic.Controllers.Artist", null)
                         .WithMany()
-                        .HasForeignKey("AlbumsId")
+                        .HasForeignKey("ArtistsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("wemusic.Controllers.Song", null)
+                    b.HasOne("wemusic.Controllers.Genre", null)
                         .WithMany()
-                        .HasForeignKey("SongsId")
+                        .HasForeignKey("GenresId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GenreSong", b =>
+            modelBuilder.Entity("FavoriteSong", b =>
                 {
-                    b.HasOne("wemusic.Controllers.Genre", null)
+                    b.HasOne("wemusic.Controllers.Favorite", null)
                         .WithMany()
-                        .HasForeignKey("GenresId")
+                        .HasForeignKey("FavoritesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -306,25 +307,42 @@ namespace wemusic.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("wemusic.Controllers.Image", b =>
+            modelBuilder.Entity("wemusic.Controllers.Favorite", b =>
                 {
-                    b.HasOne("wemusic.Controllers.Artist", null)
-                        .WithMany("Images")
-                        .HasForeignKey("ArtistId");
+                    b.HasOne("wemusic.Controllers.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("wemusic.Controllers.Playlist", b =>
                 {
-                    b.HasOne("wemusic.Controllers.User", null)
+                    b.HasOne("wemusic.Controllers.User", "user")
                         .WithMany("Playlists")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("user");
                 });
 
-            modelBuilder.Entity("wemusic.Controllers.Artist", b =>
+            modelBuilder.Entity("wemusic.Controllers.Song", b =>
                 {
-                    b.Navigation("Images");
+                    b.HasOne("wemusic.Controllers.Album", "album")
+                        .WithMany("Songs")
+                        .HasForeignKey("albumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("album");
+                });
+
+            modelBuilder.Entity("wemusic.Controllers.Album", b =>
+                {
+                    b.Navigation("Songs");
                 });
 
             modelBuilder.Entity("wemusic.Controllers.User", b =>

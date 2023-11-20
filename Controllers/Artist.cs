@@ -1,4 +1,5 @@
-﻿using wemusic.Controllers;
+﻿using System.ComponentModel.DataAnnotations;
+using wemusic.Controllers;
 
 namespace wemusic.Controllers
 {
@@ -6,10 +7,10 @@ namespace wemusic.Controllers
     {
         public string Id { get; set; }
         public string Name { get; set; }
-        public string Country { get; set; }
         public int Followers { get; set; }
-        public ICollection<Image> Images { get; set; }
+        public string Image { get; set; }
         public ICollection<Album> Albums { get; set; }
+        public ICollection<Genre> Genres { get; set; }
     }
 }
 

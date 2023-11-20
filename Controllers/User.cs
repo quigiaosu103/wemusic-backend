@@ -1,12 +1,15 @@
-﻿namespace wemusic.Controllers
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace wemusic.Controllers
 {
     public class User
     {
-        public string Id { get; set; }
+        //public string Id { get; set; }
+        [Key]
+        public string UserName { get; set; }
         public string Name { get; set; }
-        public string email { get; set; }
-        public string userName { get; set; }
-        public string passwordHash { get; set; }
+        public string Email { get; set; }
+        public string PasswordHash { get; set; }
         public string Image {  get; set; }
         public ICollection<Playlist> Playlists { get; set; }
     }
