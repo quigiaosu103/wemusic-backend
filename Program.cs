@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using wemusic.Controllers;
 
 namespace wemusic
@@ -21,7 +24,20 @@ namespace wemusic
                                .AllowAnyHeader();
                     });
             });
-           var connectionString = builder.Configuration.GetConnectionString("DbConnection");
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+            });
+            var connectionString = builder.Configuration.GetConnectionString("DbConnection");
             builder.Services.AddDbContext<WeMusicDbContext>(options => options.UseSqlServer(connectionString));
             var app = builder.Build();
             if (app.Environment.IsDevelopment())
@@ -37,6 +53,7 @@ namespace wemusic
             app.UseCors("AllowReactApp");
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

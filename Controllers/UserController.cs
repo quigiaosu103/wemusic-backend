@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace wemusic.Controllers
 {
@@ -6,7 +10,9 @@ namespace wemusic.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
+        private String jwt="";
         private WeMusicDbContext _wemusicDbContext;
+        
 
         public UserController(WeMusicDbContext context)
         {
@@ -24,17 +30,7 @@ namespace wemusic.Controllers
             return Ok(users);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetUserById(string id)
-        {
-            var user = _wemusicDbContext.Users.Find(id);
-            if (user == null)
-            {
-                return NotFound("Account not found");
-            }
-            return Ok(user);
-        }
-
+       
         [HttpPost]
         public IActionResult AddUser(User newUSer) {
             var user = _wemusicDbContext.Users.Find(newUSer.UserName);
@@ -89,6 +85,53 @@ namespace wemusic.Controllers
             _wemusicDbContext.SaveChanges();
             return Ok();
         }
+
+        [HttpGet("{username}")]
+        public IActionResult login(string username, string password) {
+            var user = _wemusicDbContext.Users.Find(username);
+            if(user == null)
+            {
+                return NotFound("user not found");
+            }
+
+            if(user.PasswordHash != password) {
+                return BadRequest("Invalid authen info");
+            }
+
+            if(user.UserName == "Admin")
+            {
+                var claims = new[] {
+                        new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                        new Claim("Access", "Admin")
+                    };
+
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SIUUUUUUUUUUUUUUU"));
+                var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var token = new JwtSecurityToken("JWTAuthenticationServer",
+                    "JWTServiceAccessToken",
+                    claims,
+                    expires: DateTime.UtcNow.AddMinutes(10),
+                    signingCredentials: signIn);
+
+                jwt = new JwtSecurityTokenHandler().WriteToken(token);
+                Response.Cookies.Append("jwtCookie", jwt, new CookieOptions
+                {
+                    Expires = DateTimeOffset.UtcNow.AddHours(1), // Set expiration time for the cookie
+                    HttpOnly = true, // Make the cookie accessible only through HTTP requests
+                    Secure = true, // Require HTTPS to send the cookie
+                    SameSite = SameSiteMode.None // Set the SameSite attribute as needed
+                });
+
+            }
+
+            return Ok(new
+            {
+                user, jwt
+            });
+        }
+
 
     }
 }

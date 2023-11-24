@@ -85,3 +85,4 @@ D:\dotnet\wemusic\wemusic\obj\Debug\net6.0\refint\wemusic.dll
 D:\dotnet\wemusic\wemusic\obj\Debug\net6.0\wemusic.pdb
 D:\dotnet\wemusic\wemusic\obj\Debug\net6.0\wemusic.genruntimeconfig.cache
 D:\dotnet\wemusic\wemusic\obj\Debug\net6.0\ref\wemusic.dll
+D:\dotnet\wemusic\wemusic\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

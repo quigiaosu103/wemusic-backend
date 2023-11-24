@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "gf+ASmcIy868FUVjdkUTP1O0HIB0+Ay9ysbKAZd3L1RmS5lteztI4ZwB+zZoTnzvelBQ49jMme+XWG8kMiSbYQ==",
+  "dgSpecHash": "tPR1y6NoOt6rmH6n9zUmjwqh7OzJbWB6mQ5lsxLn91q/37F5GTAILpGaxcCE874v3AWD6dINM1FFKeQ87mySdQ==",
   "success": true,
   "projectFilePath": "D:\\dotnet\\wemusic\\wemusic\\wemusic.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\thanh\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\thanh\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
     "C:\\Users\\thanh\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\thanh\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.25\\microsoft.aspnetcore.authentication.jwtbearer.6.0.25.nupkg.sha512",
     "C:\\Users\\thanh\\.nuget\\packages\\microsoft.aspnetcore.cors\\2.2.0\\microsoft.aspnetcore.cors.2.2.0.nupkg.sha512",
     "C:\\Users\\thanh\\.nuget\\packages\\microsoft.aspnetcore.http.abstractions\\2.2.0\\microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\thanh\\.nuget\\packages\\microsoft.aspnetcore.http.extensions\\2.2.0\\microsoft.aspnetcore.http.extensions.2.2.0.nupkg.sha512",

@@ -5,6 +5,7 @@ namespace wemusic.Controllers
     public class WeMusicDbContext: DbContext
     {
 
+        public WeMusicDbContext() { }
         public WeMusicDbContext(DbContextOptions options) : base(options)
         {
         }
