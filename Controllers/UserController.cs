@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -8,6 +9,7 @@ namespace wemusic.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class UserController : ControllerBase
     {
         private String jwt="";
@@ -21,6 +23,7 @@ namespace wemusic.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles ="Admin")]
         public IActionResult GetUser() {
             var users = _wemusicDbContext.Users.ToList();
             if (users == null)
@@ -72,9 +75,9 @@ namespace wemusic.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public IActionResult DeleteUser(string id)
         {
-            //var user_laylist = _wemusicDbContext.
 
             var user = _wemusicDbContext.Users.Find(id);
             if (user == null)
@@ -83,7 +86,7 @@ namespace wemusic.Controllers
             }
             _wemusicDbContext.Users.Remove(user);
             _wemusicDbContext.SaveChanges();
-            return Ok();
+            return Ok("successfully");
         }
 
         [HttpGet("{username}")]
@@ -101,28 +104,21 @@ namespace wemusic.Controllers
             if(user.UserName == "Admin")
             {
                 var claims = new[] {
-                        new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                        new Claim(JwtRegisteredClaimNames.Sub, "JWTServiceAccessToken"),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("Access", "Admin")
+                        new Claim(ClaimTypes.Role, "Admin")
                     };
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("SIUUUUUUUUUUUUUUU"));
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Yh2k7QSu4l8CZg5p6X3Pna9L0Miy4D3Bvt0JVr87UcOj69Kqw5R2Nmf4FWs03Hdx"));
                 var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
                 var token = new JwtSecurityToken("JWTAuthenticationServer",
-                    "JWTServiceAccessToken",
+                    "JWTServicePostmanClient",
                     claims,
                     expires: DateTime.UtcNow.AddMinutes(10),
                     signingCredentials: signIn);
 
                 jwt = new JwtSecurityTokenHandler().WriteToken(token);
-                Response.Cookies.Append("jwtCookie", jwt, new CookieOptions
-                {
-                    Expires = DateTimeOffset.UtcNow.AddHours(1), // Set expiration time for the cookie
-                    HttpOnly = true, // Make the cookie accessible only through HTTP requests
-                    Secure = true, // Require HTTPS to send the cookie
-                    SameSite = SameSiteMode.None // Set the SameSite attribute as needed
-                });
 
             }
 

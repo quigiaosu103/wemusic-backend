@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("wemusic")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+37954d8e01ca9296cde9f3e45b8223ab5d1a1ec9")]
 [assembly: System.Reflection.AssemblyProductAttribute("wemusic")]
 [assembly: System.Reflection.AssemblyTitleAttribute("wemusic")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

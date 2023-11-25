@@ -32,6 +32,7 @@ namespace wemusic
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
+                    ValidateLifetime = true,
                     ValidAudience = builder.Configuration["Jwt:Audience"],
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
@@ -51,9 +52,9 @@ namespace wemusic
             app.UseRouting();
 
             app.UseCors("AllowReactApp");
-
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+            
 
             app.UseEndpoints(endpoints =>
             {
@@ -66,7 +67,6 @@ namespace wemusic
                 app.UseSwaggerUI();
             }
 
-            app.UseAuthorization();
 
 
             app.MapControllers();

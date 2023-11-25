@@ -82,6 +82,34 @@ namespace wemusic.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("podcast")]
+        public IActionResult GetPodcast()
+        {
+            var pcs = _wemusicDbContext.Songs
+                .Where(song => song.Type == "podcast")
+                 .Join(_wemusicDbContext.Albums, song => song.album.Id, album => album.Id, (song, album) => new {
+                     id = song.Id,
+                     name = song.Name,
+                     stream = song.Stream,
+                     type = song.Type,
+                     image = album.Image,
+                     src = song.Src,
+                     artist = _wemusicDbContext.Albums
+                        .Where(ab => ab.Id == album.Id)
+                        .SelectMany(album => album.Artists)
+                        .ToList()
+                 }).OrderBy(song => song.stream)
+                .Take(40)
+                .ToList();
+            if (pcs==null)
+            {
+                return NotFound("No podcast has found!");
+            }
+            return Ok(pcs);
+        
+        }
+
         [HttpGet("more")] 
         public ActionResult GetMoreSongs() {
             var songs = _wemusicDbContext.Songs.Take(30).ToList();
